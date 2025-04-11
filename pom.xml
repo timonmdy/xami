@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>com.txmondv</groupId>
-    <artifactId>media-interface</artifactId>
+    <artifactId>xami</artifactId>
     <version>0.0.1</version>
-    <name>MediaInterface</name>
-    <description>Full-Stack Application to display media from disks</description>
+    <name>xami</name>
+    <description>eXtensible Accessible Media Interface</description>
     <url/>
     <licenses>
         <license/>
