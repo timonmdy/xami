@@ -21,13 +21,14 @@ public class Xami {
     public static void main(String[] args) {
         String today = LocalDate.now().toString();
 
+        System.setProperty("logging.file.name", "./logs/" + today + ".log");
+
         SpringApplication app = new SpringApplication(Xami.class);
         ConfigManager.loadAllConfigs();
 
         int webServerPort = WEBSERVER_PORT.get();
         app.setDefaultProperties(Map.of(
-                "server.port", webServerPort,
-                "logging.file.name", "./logs/" + today + ".log"
+                "server.port", webServerPort
         ));
 
         app.run(args);

@@ -53,8 +53,6 @@ echo.
 echo === Remove Proxy ===
 set /p HOST=Enter hostname to remove (e.g. example.test): 
 set /p PORT=Enter port to remove (e.g. 7465): 
-
-echo.
 echo Enter IP used when it was added (default: %DEFAULT_IP%)
 set /p USER_IP=Custom loopback IP: 
 if "%USER_IP%"=="" (
@@ -63,7 +61,7 @@ if "%USER_IP%"=="" (
     set BASE_IP=%USER_IP%
 )
 
-echo Unforunately, you will have to remove the hosts entry %HOST% from %BASE_IP% manually...
+echo Unfortunately, you will have to remove the hosts entry %HOST% from %BASE_IP% manually...
 echo Removing netsh rule: %BASE_IP%:80
 netsh interface portproxy delete v4tov4 listenport=80 listenaddress=%BASE_IP%
 echo Proxy removed.

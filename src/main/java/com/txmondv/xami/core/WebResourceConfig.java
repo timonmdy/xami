@@ -22,15 +22,9 @@ public class WebResourceConfig implements WebMvcConfigurer {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // Root path
+        // Forward all frontend routes to index.html EXCEPT known static paths like /api, /static, /assets, etc.
         registry.addViewController("/").setViewName("forward:/index.html");
-
-        // Any path that:
-        // - does NOT start with "/api"
-        // - does NOT start with "/static"
-        // - does NOT include a file extension
-        // will be forwarded to index.html for SPA routing.
-        registry.addViewController("/{path:^(?!api|static|.*\\..*).*$}/**")
+        registry.addViewController("/{spring:^(?!api|static|assets|.*\\..*).*$}/**")
                 .setViewName("forward:/index.html");
     }
 
@@ -41,7 +35,10 @@ public class WebResourceConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Serve static resources from /static/** and /assets/** if needed
         registry.addResourceHandler("/static/**")
-                .addResourceLocations("classpath:/static/");
+                .addResourceLocations("classpath:/static/static/");
+        registry.addResourceHandler("/assets/**")
+                .addResourceLocations("classpath:/static/assets/");
     }
 }
