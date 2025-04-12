@@ -1,4 +1,4 @@
-# Media Interface
+# XAMI - eXtensible Accessible Media Interface
 
 A modern platform for managing and interacting with rich multimedia content. This system features portable content
 definitions through flexible JSON-based configurations and a highly responsive, visually appealing frontend. The
