@@ -1,7 +1,9 @@
 type StorageKey = 
+    | "language"
     | "sidebarLocked";
 
 const defaultValues: Record<StorageKey, unknown> = {
+    "language": "en",
     "sidebarLocked": false
 }
 

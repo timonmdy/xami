@@ -13,6 +13,15 @@ spring:
     banner-mode: off
     allow-bean-definition-overriding: true
   shell:
+    command:
+      clear:
+        enabled: false
+      quit:
+        enabled: false
+      exit:
+        enabled: false
+      version:
+        enabled: false
     interactive:
       enabled: true
     jline:
