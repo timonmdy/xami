@@ -3,11 +3,16 @@ package com.timonmdy.xami.commands.system;
 import com.timonmdy.xami.core.annotations.LoggingCommand;
 import com.timonmdy.xami.core.commands.CommandManager;
 import com.timonmdy.xami.core.configurations.ConfigManager;
+import com.timonmdy.xami.service.themes.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 import static com.timonmdy.xami.config.ServerUserConfig.WEBSERVER_PORT;
 
@@ -17,6 +22,9 @@ public class SystemCommands {
 
     @Autowired
     private BuildProperties buildProperties;
+
+    @Autowired
+    private ThemeService themeService;
 
     @LoggingCommand
     @ShellMethod("Prints the current version of the server")
@@ -36,10 +44,37 @@ public class SystemCommands {
     }
 
     @LoggingCommand
-    @ShellMethod("Reloads configuration files. Attention: Some changes may not be applied until the server is restarted.")
-    public void reload() {
-        ConfigManager.loadAllConfigs();
-        CommandManager.logResult("reloadConfig", "Reloaded all configuration files");
+    @ShellMethod(
+            "Reloads configuration files. Attention: Some changes may not be applied until the server is restarted. " +
+                    "You can add target behind the command to specify what to reload. If you do not specify a target, all targets will be reloaded " +
+                    "Available targets: config, themes"
+    )
+    public void reload(@ShellOption(defaultValue = ShellOption.NULL) List<String> targets) {
+        Map<String, Runnable> actions = Map.of(
+                "config", () -> {
+                    ConfigManager.loadAllConfigs();
+                    CommandManager.logResult("reloadConfig", "Reloaded configuration files");
+                },
+                "themes", () -> {
+                    themeService.reload();
+                    CommandManager.logResult("reloadThemes", "Reloaded themes");
+                }
+        );
+
+        if (targets == null || targets.isEmpty()) {
+            actions.values().forEach(Runnable::run);
+            CommandManager.logResult("reloadAll", "Reloaded all configuration targets");
+            return;
+        }
+
+        for (String target : targets) {
+            Runnable action = actions.get(target.toLowerCase());
+            if (action != null) {
+                action.run();
+            } else {
+                CommandManager.logResult("reload", "Unknown target: " + target);
+            }
+        }
     }
 
     @LoggingCommand

@@ -1,0 +1,15 @@
+{
+  "identifier": "default-dark",
+  "name": "Dark",
+  "description": "Default (built-in) dark theme.",
+  "theme": {
+    "color-background": "#0f0f0f",
+    "color-cards": "#272727",
+    "color-accent": "#fe0032",
+    "color-text-primary": "#ffffff",
+    "color-text-secondary": "#d1d5dc",
+    "color-error": "#fb2c36",
+    "color-warning": "#ffdf20",
+    "color-success": "#00c951"
+  }
+}

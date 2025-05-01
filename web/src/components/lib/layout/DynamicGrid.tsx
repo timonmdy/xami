@@ -1,4 +1,5 @@
 import React from "react";
+import "./DynamicGrid.css";
 
 interface DynamicGridProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ const DynamicGrid: React.FC<DynamicGridProps> = ({ children }) => {
   });
 
   return (
-    <div className="bg-zinc-900 min-h-full p-6 overflow-y-auto overflow-x-hidden">
+    <div className="bg-background min-h-full p-6 overflow-y-auto overflow-x-hidden">
       <div className="responsive-row">
         {columns.map((column, colIndex) => (
           <div className="responsive-columns" key={colIndex}>

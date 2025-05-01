@@ -1,44 +1,7 @@
 @import "tailwindcss";
+@config "..//tailwind.config.js";
 
-.responsive-row {
-    display: flex;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-}
-
-.responsive-columns {
-    position: relative;
-    min-height: 1px;
-    padding-right: 15px;
-    padding-left: 15px;
-}
-
-@media (min-width: 576px) {
-    .responsive-columns {
-        width: 1003%;
-    }
-}
-
-@media (min-width: 768px) {
-    .responsive-columns {
-        width: 50%;
-    }
-}
-
-@media (min-width: 992px) {
-    .responsive-columns {
-        width: 50%;
-    }
-}
-
-@media (min-width: 1200px) {
-    .responsive-columns {
-        width: 33.3%;
-    }
-}
-
-/* Custom scrollbar */
+/* Global scrollbars */
 ::-webkit-scrollbar {
     width: 8px;
 }

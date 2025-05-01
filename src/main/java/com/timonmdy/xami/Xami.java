@@ -12,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -21,6 +22,7 @@ import static com.timonmdy.xami.config.ServerUserConfig.WEBSERVER_PORT;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
+@EnableScheduling
 public class Xami {
     public static final Logger MAIN_LOGGER = LoggerFactory.getLogger(Xami.class);
 

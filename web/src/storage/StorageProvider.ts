@@ -1,9 +1,11 @@
 type StorageKey = 
-    | "language"
+    | "language" // CHANGED TO DB STORAGE IN THE FUTURE
+    | "theme" // CHANGED TO DB STORAGE IN THE FUTURE
     | "sidebarLocked";
 
 const defaultValues: Record<StorageKey, unknown> = {
     "language": "en",
+    "theme": "default-dark",
     "sidebarLocked": false
 }
 

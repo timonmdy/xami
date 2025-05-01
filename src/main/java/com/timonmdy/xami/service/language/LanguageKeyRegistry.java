@@ -31,7 +31,7 @@ public class LanguageKeyRegistry {
         File customLangDir = new File(CUSTOM_LANG_DIR_PATH);
         if (!customLangDir.exists()) {
             if (customLangDir.mkdirs()) {
-                LOGGER.info("Created missing directory: {}", customLangDir.getAbsolutePath());
+                LOGGER.info("Created missing directory: {}", customLangDir.getPath());
             } else {
                 LOGGER.warn("Failed to create language directory at: {}", customLangDir.getAbsolutePath());
             }

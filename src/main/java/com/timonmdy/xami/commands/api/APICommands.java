@@ -1,7 +1,9 @@
 package com.timonmdy.xami.commands.api;
 
+import com.timonmdy.xami.api.dto.themes.ThemeSource;
 import com.timonmdy.xami.core.annotations.LoggingCommand;
 import com.timonmdy.xami.core.commands.CommandManager;
+import com.timonmdy.xami.service.themes.ThemeService;
 import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -20,6 +22,7 @@ import static com.timonmdy.xami.service.language.LanguageConfig.CUSTOM_LANG_DIR_
 public class APICommands {
 
     private final RequestMappingHandlerMapping mapping;
+    private final ThemeService themeService;
 
     @LoggingCommand
     @ShellMethod("Prints registered API routes, sorted by path")
@@ -64,5 +67,20 @@ public class APICommands {
         }
     }
 
-
+    @LoggingCommand
+    @ShellMethod("Lists available themes and their source (predefined/user/edited)")
+    public void themes() {
+        themeService.getAvailableThemeIdentifiers()
+                .stream()
+                .sorted()
+                .forEach(id -> {
+                    ThemeSource source = themeService.getThemeSource(id);
+                    String label = switch (source) {
+                        case PREDEFINED -> "predefined";
+                        case USER -> "user";
+                        case EDITED -> "edited";
+                    };
+                    CommandManager.logResult("Theme", id + " (" + label + ")");
+                });
+    }
 }

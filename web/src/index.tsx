@@ -5,6 +5,7 @@ import App from './components/App'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import fetchTranslations from './core/LanguageLoader'
 import { name, version } from "../package.json";
+import applyTheme from './core/ThemeLoader'
 
 const queryClient = new QueryClient();
 
@@ -16,7 +17,12 @@ console.info(
   'color: #9E9E9E; font-style: italic;'
 );
 
-fetchTranslations().then(() => {
+async function setup() {
+  await fetchTranslations();
+  await applyTheme();
+}
+
+setup().then(() => {
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>

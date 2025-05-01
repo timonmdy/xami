@@ -45,11 +45,11 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
         >
             <div
                 onClick={handleContentClick}
-                className="bg-zinc-800 p-6 rounded-xl shadow-xl w-full max-w-2xl text-white relative"
+                className="bg-zinc-800 p-6 rounded-xl shadow-xl w-full max-w-2xl text-primary relative"
             >
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 text-white hover:text-cyan-400 transition"
+                    className="absolute top-4 right-4 text-text-primary hover:text-accent transition-all duration-300"
                     aria-label="Close modal"
                 >
                     <FiX size={24} />

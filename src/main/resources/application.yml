@@ -1,4 +1,11 @@
+cache:
+  eviction:
+    interval:
+      millis: 300000 # 5 minutes
+
 spring:
+  profiles:
+    active: production
   datasource:
     url: "jdbc:h2:file:./data/db"
     username: "sa"
