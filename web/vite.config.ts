@@ -10,6 +10,7 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+      port: 7464,
       proxy: {
         '/api': {
           target: 'http://localhost:7465',

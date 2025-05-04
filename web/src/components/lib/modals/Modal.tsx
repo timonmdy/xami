@@ -5,9 +5,10 @@ interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
     children: React.ReactNode;
+    backgroundOpacity?: number;
 }
 
-export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
+export const Modal = ({ isOpen, onClose, children, backgroundOpacity = 50 }: ModalProps) => {
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -16,7 +17,7 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
         }
 
         return () => {
-            document.body.style.overflow = ''; 
+            document.body.style.overflow = '';
         };
     }, [isOpen]);
 
@@ -36,16 +37,22 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
         }
     };
 
+    const backgroundStyle = {
+        backgroundColor: `rgba(0, 0, 0, ${backgroundOpacity / 100})`
+    };
+
     return (
         <div
             onClick={handleBackdropClick}
             onKeyDown={handleKeyDown}
             tabIndex={-1}
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+            style={backgroundStyle}
+            className="fixed inset-0 z-50 flex items-center justify-center"
         >
+
             <div
                 onClick={handleContentClick}
-                className="bg-zinc-800 p-6 rounded-xl shadow-xl w-full max-w-2xl text-primary relative"
+                className="bg-zinc-800 p-6 rounded-xl shadow-xl w-full max-w-2xl text-text-primary relative"
             >
                 <button
                     onClick={onClose}

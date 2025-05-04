@@ -14,14 +14,13 @@ public class LanguageConfig {
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 
-        // Order matters: custom files loaded first (overrides), then base
         messageSource.setBasenames(
-                "file:./" + CUSTOM_LANG_DIR_PATH + "/messages_custom",  // custom override file
-                "classpath:/i18n/messages"             // base file from resources
+                "file:./" + CUSTOM_LANG_DIR_PATH + "/messages_custom",
+                "classpath:/i18n/messages"
         );
 
         messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setFallbackToSystemLocale(false); // prevent locale fallback issues
+        messageSource.setFallbackToSystemLocale(false);
         messageSource.setCacheSeconds(5);
 
         return messageSource;

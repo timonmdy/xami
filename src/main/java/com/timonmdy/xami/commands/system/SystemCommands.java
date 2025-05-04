@@ -44,12 +44,15 @@ public class SystemCommands {
     }
 
     @LoggingCommand
-    @ShellMethod(
-            "Reloads configuration files. Attention: Some changes may not be applied until the server is restarted. " +
-                    "You can add target behind the command to specify what to reload. If you do not specify a target, all targets will be reloaded " +
-                    "Available targets: config, themes"
-    )
-    public void reload(@ShellOption(defaultValue = ShellOption.NULL) List<String> targets) {
+    @ShellMethod("Reloads parts of the application. Attention: Some changes may not take effect until the server is restarted.")
+    public void reload(
+            @ShellOption(
+                    defaultValue = ShellOption.NULL,
+                    help = "Optional target(s) to reload. If omitted, all targets will be reloaded. Available targets: config, themes"
+            )
+            List<String> targets
+    ) {
+
         Map<String, Runnable> actions = Map.of(
                 "config", () -> {
                     ConfigManager.loadAllConfigs();

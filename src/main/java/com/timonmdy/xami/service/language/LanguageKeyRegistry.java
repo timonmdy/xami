@@ -47,7 +47,6 @@ public class LanguageKeyRegistry {
 
             properties.load(input);
             return new ArrayList<>(properties.stringPropertyNames());
-
         } catch (Exception e) {
             LOGGER.error("Failed to load language key file '{}': {}", BASE_KEYS_FILE, e.getMessage(), e);
             return Collections.emptyList();

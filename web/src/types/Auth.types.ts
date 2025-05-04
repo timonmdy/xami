@@ -3,18 +3,11 @@ export interface RegisterRequest {
     password: string;
 }
 
-export interface RegisterResponse { 
-    success: boolean;
-    message: string;
-}
-
-export interface LoginRequest { 
+export interface AuthRequest { 
     username: string; 
     password: string;
 }
 
-export interface LoginResponse {
-    success: boolean;
-    token?: string;
-    error?: string;
+export interface AuthResponse {
+    token: string;
 }

@@ -3,7 +3,6 @@ package com.timonmdy.xami.api.controller.auth;
 import com.timonmdy.xami.api.dto.auth.AuthRequest;
 import com.timonmdy.xami.api.dto.auth.AuthResponse;
 import com.timonmdy.xami.api.dto.auth.RegisterRequest;
-import com.timonmdy.xami.api.dto.auth.RegisterResponse;
 import com.timonmdy.xami.core.security.jwt.JwtUtil;
 import com.timonmdy.xami.domain.models.users.User;
 import com.timonmdy.xami.service.auth.AuthService;
@@ -29,18 +28,21 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<Object> register(@RequestBody RegisterRequest request) {
         Optional<User> user = authService.registerUser(request.getUsername(), request.getPassword());
-        return user.map(value -> ResponseEntity.ok(new RegisterResponse(true, "User " + value.getUsername() + " erfolgreich registriert.")))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RegisterResponse(false, "User ist bereits registriert!")));
+        return user
+                .map(value -> ResponseEntity.status(HttpStatus.CREATED).build())
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build()); // 409: Conflict
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request, HttpServletResponse response) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse("Unbekannter Benutzername oder Passwort."));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401
         }
 
         String accessToken = jwtUtil.generateToken(request.getUsername());
@@ -48,21 +50,29 @@ public class AuthController {
 
         response.addHeader("refresh_cookie", authService.getRefreshCookie(refreshToken, jwtUtil.getRefreshTokenExpiry()).toString());
 
-        return ResponseEntity.ok(new AuthResponse(true, accessToken));
+        return ResponseEntity.ok(new AuthResponse(accessToken));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        var expiredCookie = authService.getRefreshCookie("", 0);
+        response.addHeader("Set-Cookie", expiredCookie.toString());
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/refresh")
-    public AuthResponse refresh(HttpServletRequest request) {
+    public ResponseEntity<AuthResponse> refresh(HttpServletRequest request) {
         String refreshToken = jwtUtil.extractTokenFromCookie(request, "refresh_token");
 
         if (refreshToken == null || !jwtUtil.validateToken(refreshToken)) {
-            throw new RuntimeException("Invalid or expired refresh token");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         String username = jwtUtil.extractUsername(refreshToken);
         String newAccessToken = jwtUtil.generateToken(username);
 
-        return new AuthResponse(true, newAccessToken);
+        return ResponseEntity.ok(new AuthResponse(newAccessToken));
     }
 
     @GetMapping("/isAuthenticated")
@@ -72,10 +82,6 @@ public class AuthController {
         }
 
         String token = authHeader.substring(7);
-        if (!jwtUtil.validateToken(token)) {
-            return ResponseEntity.ok(false);
-        }
-
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(jwtUtil.validateToken(token));
     }
 }
