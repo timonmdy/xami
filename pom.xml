@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.timonmdy</groupId>
     <artifactId>xami</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <name>xami</name>
     <description>eXtensible Accessible Media Interface</description>
     <url/>
@@ -18,7 +18,10 @@
         <license/>
     </licenses>
     <developers>
-        <developer/>
+        <developer>
+            <id>timonmdy</id>
+            <name>Timon</name>
+        </developer>
     </developers>
     <scm>
         <connection/>

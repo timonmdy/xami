@@ -1,10 +1,10 @@
 import Cookies from "js-cookie";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { FetchError } from "../../../core/FetchWrapper";
-import { login } from "../../../service/Auth.service";
-import { AuthRequest } from "../../../types/Auth.types";
-import { Modal } from "../../lib/modals/Modal";
+import {useState} from "react";
+import {FetchError} from "../../../core/FetchWrapper";
+import {login} from "../../../service/Auth.service";
+import {AuthRequest} from "../../../types/Auth.types";
+import {Modal} from "../../lib/modals/Modal";
+import {useLang} from "../../../hooks/Language.hooks.ts";
 
 interface Props {
     isOpen: boolean;
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const LoginModal = ({ isOpen, onClose, onSwitch }: Props) => {
-    const { t: lang } = useTranslation();
+    const lang  = useLang();
     const [form, setForm] = useState<AuthRequest>({ username: "", password: "" });
     const [error, setError] = useState<string | null>(null);
 
@@ -24,18 +24,18 @@ export const LoginModal = ({ isOpen, onClose, onSwitch }: Props) => {
         e.preventDefault();
         try {
             const loginData = await login(form);
-            if(!loginData || !loginData.token) return setError(lang("error.unexpected"));
+            if(!loginData || !loginData.token) return setError(lang("ERROR_UNEXPECTED"));
 
             Cookies.set("accessToken", loginData.token);
             dispatchEvent(new Event("refetchAuth"));
             setError(null);
             onClose();
         } catch (error) {
-            if (!(error instanceof FetchError)) return setError(lang("error.unexpected"));
+            if (!(error instanceof FetchError)) return setError(lang("ERROR_UNEXPECTED"));
 
             switch (error.status) {
                 case 401:
-                    setError(lang("error.invalid_credentials"));
+                    setError(lang("ERROR_INVALID_CREDENTIALS"));
                     break;
             }
         }
@@ -44,12 +44,12 @@ export const LoginModal = ({ isOpen, onClose, onSwitch }: Props) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} backgroundOpacity={70}>
             <form onSubmit={handleSubmit} className="space-y-4">
-                <h2 className="text-2xl font-semibold text-text-primary">{lang("auth.login.title")}</h2>
+                <h2 className="text-2xl font-semibold text-text-primary">{lang("AUTH_LOGIN_TITLE")}</h2>
 
                 {error && <p className="text-error text-sm">{error}</p>}
 
                 <div>
-                    <label className="block text-text-secondary">{lang("auth.username")}</label>
+                    <label className="block text-text-secondary">{lang("AUTH_USERNAME")}</label>
                     <input
                         name="username"
                         type="text"
@@ -61,7 +61,7 @@ export const LoginModal = ({ isOpen, onClose, onSwitch }: Props) => {
                 </div>
 
                 <div>
-                    <label className="block text-text-secondary">{lang("auth.password")}</label>
+                    <label className="block text-text-secondary">{lang("AUTH_PASSWORD")}</label>
                     <input
                         name="password"
                         type="password"
@@ -76,12 +76,12 @@ export const LoginModal = ({ isOpen, onClose, onSwitch }: Props) => {
                     type="submit"
                     className="w-full bg-accent text-white py-2 rounded-md hover:opacity-90 transition"
                 >
-                    {lang("auth.login")}
+                    {lang("AUTH_LOGIN")}
                 </button>
             </form>
             <p className="text-sm mt-4 text-text-muted">
-                {lang("auth.no_account")}{" "}
-                <button onClick={onSwitch} className="text-accent hover:underline">{lang("auth.register.register_here")}</button>
+                {lang("AUTH_NO_ACCOUNT")}{" "}
+                <button onClick={onSwitch} className="text-accent hover:underline">{lang("AUTH_REGISTER_REGISTER_HERE")}</button>
             </p>
         </Modal>
     );

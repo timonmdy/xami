@@ -1,6 +1,5 @@
 package com.timonmdy.xami.core.aspects;
 
-import com.timonmdy.xami.core.annotations.Authorized;
 import com.timonmdy.xami.core.exceptions.APIAccessDeniedException;
 import com.timonmdy.xami.domain.models.users.User;
 import com.timonmdy.xami.service.users.UserService;
@@ -20,18 +19,18 @@ import java.util.Optional;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class AuthorizedAspect {
+public class AuthenticatedAspect {
 
     private final UserService userInfoService;
 
     /**
-     * Check if the user is authorized to access the resource.
-     * If the user is not authorized, an {@code APIAccessDeniedException} will be thrown.
-     * This method will be called before the method annotated with {@code @Authorized}.
+     * Check if the user is authenticated to access the resource.
+     * If the user is not authenticated, an {@code APIAccessDeniedException} will be thrown.
+     * This method will be called before the method annotated with {@code @Authenticated}.
      *
-     * @see Authorized
+     * @see com.timonmdy.xami.core.annotations.Authenticated
      */
-    @Around("@annotation(authorized)")
+    @Around("@annotation(authenticated)")
     public Object checkAuthorization(ProceedingJoinPoint joinPoint) throws Throwable {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);

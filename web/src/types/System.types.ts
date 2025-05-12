@@ -8,3 +8,7 @@ export interface HardwareStats {
     freeDiskSpaceMiB: number;
     systemUptimeSeconds: number; // MS
 }
+
+export interface AppData {
+    APPLICATION_NAME: string;
+}

@@ -62,7 +62,7 @@ public class SecurityConfig {
                         /*
                          * Uncomment the following line to require authentication for all API requests.
                          * Currently, the system allows access for guests and registered users.
-                         * Admin/user-specific access is controlled via @Authorized aspect elsewhere.
+                         * Admin/user-specific access is controlled via @Authenticated aspect elsewhere.
                          *
                          * .requestMatchers("/api/**").authenticated()
                          */

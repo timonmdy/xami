@@ -6,6 +6,7 @@ import com.timonmdy.xami.api.dto.auth.RegisterRequest;
 import com.timonmdy.xami.core.security.jwt.JwtUtil;
 import com.timonmdy.xami.domain.models.users.User;
 import com.timonmdy.xami.service.auth.AuthService;
+import com.timonmdy.xami.service.auth.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.Optional;
 public class AuthController {
     private final AuthService authService;
     private final AuthenticationManager authenticationManager;
+    private final RefreshTokenService refreshTokenService;
     private final JwtUtil jwtUtil;
 
     @PostMapping("/register")
@@ -46,9 +48,9 @@ public class AuthController {
         }
 
         String accessToken = jwtUtil.generateToken(request.getUsername());
-        String refreshToken = jwtUtil.generateRefreshToken(request.getUsername());
+        String refreshToken = refreshTokenService.createRefreshToken(request.getUsername()).getToken();
 
-        response.addHeader("refresh_cookie", authService.getRefreshCookie(refreshToken, jwtUtil.getRefreshTokenExpiry()).toString());
+        response.addHeader("Set-Cookie", authService.getRefreshCookie(refreshToken, jwtUtil.getRefreshTokenExpiry()).toString());
 
         return ResponseEntity.ok(new AuthResponse(accessToken));
     }
@@ -65,12 +67,12 @@ public class AuthController {
     public ResponseEntity<AuthResponse> refresh(HttpServletRequest request) {
         String refreshToken = jwtUtil.extractTokenFromCookie(request, "refresh_token");
 
-        if (refreshToken == null || !jwtUtil.validateToken(refreshToken)) {
+        if (refreshToken == null || !refreshTokenService.validateRefreshToken(refreshToken)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String username = jwtUtil.extractUsername(refreshToken);
-        String newAccessToken = jwtUtil.generateToken(username);
+        String username = refreshTokenService.getUsernameFromRefreshToken(refreshToken);
+        String newAccessToken = refreshTokenService.createRefreshToken(username).getToken();
 
         return ResponseEntity.ok(new AuthResponse(newAccessToken));
     }

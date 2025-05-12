@@ -1,33 +1,39 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import {StrictMode} from 'react'
+import {createRoot} from 'react-dom/client'
 import './index.css'
 import App from './components/App'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import {QueryClient, QueryClientProvider} from 'react-query'
 import fetchTranslations from './core/LanguageLoader'
-import { name, version } from "../package.json";
+import {name, version} from "../package.json";
 import applyTheme from './core/ThemeLoader'
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnMount: false
+        }
+    }
+});
 
 console.info(
-  `%cThis page is running %c${name} %cv${version} %c[${import.meta.env.MODE}]`,
-  'color: #ffffff;',
-  'color: #AB47BC; font-weight: 700;',
-  'color: #AB47BC; font-weight: 300;',
-  'color: #9E9E9E; font-style: italic;'
+    `%cThis page is running %c${name} %cv${version} %c[${import.meta.env.MODE}]`,
+    'color: #ffffff;',
+    'color: #AB47BC; font-weight: 700;',
+    'color: #AB47BC; font-weight: 300;',
+    'color: #9E9E9E; font-style: italic;'
 );
 
 async function setup() {
-  await fetchTranslations();
-  await applyTheme();
+    await fetchTranslations();
+    await applyTheme();
 }
 
 setup().then(() => {
-  createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </StrictMode>
-  )
+    createRoot(document.getElementById('root')!).render(
+        <StrictMode>
+            <QueryClientProvider client={queryClient}>
+                <App/>
+            </QueryClientProvider>
+        </StrictMode>
+    )
 });

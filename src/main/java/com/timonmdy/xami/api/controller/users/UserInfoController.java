@@ -1,7 +1,7 @@
 package com.timonmdy.xami.api.controller.users;
 
 import com.timonmdy.xami.api.dto.users.UserDto;
-import com.timonmdy.xami.core.annotations.Authorized;
+import com.timonmdy.xami.core.annotations.Authenticated;
 import com.timonmdy.xami.core.annotations.Roles;
 import com.timonmdy.xami.domain.models.users.User;
 import com.timonmdy.xami.domain.models.users.UserRole;
@@ -20,7 +20,7 @@ import java.util.List;
 public class UserInfoController {
     private final UserService userInfoService;
 
-    @Authorized
+    @Authenticated
     @GetMapping("/self")
     public ResponseEntity<UserDto> getUsername(User user) {
         return ResponseEntity.ok(new UserDto(user));

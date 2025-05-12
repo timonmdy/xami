@@ -1,6 +1,5 @@
 package com.timonmdy.xami.core.annotations;
 
-import com.timonmdy.xami.core.aspects.AuthorizedAspect;
 import com.timonmdy.xami.domain.models.users.User;
 
 import java.lang.annotation.ElementType;
@@ -11,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * Marks a method as requiring user authentication.
  * <p>
- * When a method is annotated with {@code @Authorized}, it will be intercepted by an
+ * When a method is annotated with {@code @Authenticated}, it will be intercepted by an
  * authorization aspect to ensure that the request contains a valid authorization header.
  * If the user is not authenticated, an {@code APIAccessDeniedException}
  * will be thrown.
@@ -23,17 +22,17 @@ import java.lang.annotation.Target;
  *
  * <h3>Example Usage:</h3>
  * <pre>{@code
- * @Authorized
+ * @Authenticated
  * public void handleRequest(User user) {
  *     // The 'user' parameter is automatically injected
  *     System.out.println("Authenticated user: " + user.getUsername());
  * }
  * }</pre>
  *
- * @see AuthorizedAspect
+ * @see com.timonmdy.xami.core.aspects.AuthenticatedAspect
  * @see User
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Authorized {
+public @interface Authenticated {
 }

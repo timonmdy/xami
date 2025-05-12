@@ -5,10 +5,13 @@ import SearchBar from '../../lib/form/SearchBar';
 import { fetchSearchResults } from '../../../service/Search.service';
 import { SearchResult } from '../../../types/Search.types';
 import { MAX_SEARCH_RESULTS } from '../../../config/Search.config';
+import {useNavigate} from "react-router";
 
 
 
 const NavbarSearch: React.FC = () => {
+  const navigate = useNavigate();
+
   const [search, setSearch] = useState('');
   const [showResults, setShowResults] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -23,7 +26,7 @@ const NavbarSearch: React.FC = () => {
   });
 
   function handleNavigate(result: SearchResult) {
-    console.log('Navigating to:', result.file);
+    navigate("/" + result.file);
   }
 
   useEffect(() => {

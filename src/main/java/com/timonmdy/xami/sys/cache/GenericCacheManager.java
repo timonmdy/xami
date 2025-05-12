@@ -28,7 +28,7 @@ public class GenericCacheManager {
     /**
      * Evicts expired entries from all registered caches.
      */
-    @Scheduled(fixedDelayString = "${cache.eviction.interval.millis:300000}") // default: 5 minutes
+    @Scheduled(fixedDelayString = "${app.cache.eviction.interval.millis:300000}") // default: 5 minutes
     public void scheduledEviction() {
         for (GenericCache<?, ?> cache : registeredCaches) {
             cache.evictExpired();

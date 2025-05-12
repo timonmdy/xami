@@ -1,7 +1,10 @@
-cache:
-  eviction:
-    interval:
-      millis: 300000 # 5 minutes
+app:
+  frontend:
+    index-path: "/index.html"
+  cache:
+    eviction:
+      interval:
+        millis: 300000 # 5 minutes
 
 spring:
   profiles:

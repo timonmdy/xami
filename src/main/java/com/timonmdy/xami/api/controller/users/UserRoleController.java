@@ -1,7 +1,7 @@
 package com.timonmdy.xami.api.controller.users;
 
 import com.timonmdy.xami.api.dto.users.ChangeRoleRequest;
-import com.timonmdy.xami.core.annotations.Authorized;
+import com.timonmdy.xami.core.annotations.Authenticated;
 import com.timonmdy.xami.core.annotations.Roles;
 import com.timonmdy.xami.domain.models.users.User;
 import com.timonmdy.xami.domain.models.users.UserRole;
@@ -30,7 +30,7 @@ public class UserRoleController {
         userRoleService.removeRole(roleRequest.getUsername(), roleRequest.getRole());
     }
 
-    @Authorized
+    @Authenticated
     @GetMapping
     public Set<UserRole> getRoles(User user) {
         return userRoleService.getRoles(user.getUsername());

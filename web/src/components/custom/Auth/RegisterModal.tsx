@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Modal } from "../../lib/modals/Modal";
-import { RegisterRequest } from "../../../types/Auth.types";
-import { register } from "../../../service/Auth.service";
-import { FetchError } from "../../../core/FetchWrapper";
+import {useState} from "react";
+import {Modal} from "../../lib/modals/Modal";
+import {RegisterRequest} from "../../../types/Auth.types";
+import {register} from "../../../service/Auth.service";
+import {FetchError} from "../../../core/FetchWrapper";
+import {useLang} from "../../../hooks/Language.hooks.ts";
 
 interface Props {
     isOpen: boolean;
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const RegisterModal = ({ isOpen, onClose, onSwitch }: Props) => {
-    const { t: lang } = useTranslation();
+    const lang  = useLang();
     const [form, setForm] = useState<RegisterRequest>({ username: "", password: "" });
     const [error, setError] = useState<string | null>(null);
 
@@ -26,11 +26,11 @@ export const RegisterModal = ({ isOpen, onClose, onSwitch }: Props) => {
             await register(form);
             onClose();
         } catch (error) {
-            if (!(error instanceof FetchError)) return setError(lang("error.unexpected"));
+            if (!(error instanceof FetchError)) return setError(lang("ERROR_UNEXPECTED"));
 
             switch (error.status) {
                 case 409:
-                    setError(lang("error.user_already_registered"));
+                    setError(lang("ERROR_USER_ALREADY_REGISTERED"));
                     break;
             }
         }
@@ -39,12 +39,12 @@ export const RegisterModal = ({ isOpen, onClose, onSwitch }: Props) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} backgroundOpacity={70}>
             <form onSubmit={handleSubmit} className="space-y-4">
-                <h2 className="text-2xl font-semibold text-text-primary">{lang("auth.register.title")}</h2>
+                <h2 className="text-2xl font-semibold text-text-primary">{lang("AUTH_REGISTER_TITLE")}</h2>
 
                 {error && <p className="text-error text-sm">{error}</p>}
 
                 <div>
-                    <label className="block text-text-secondary">{lang("auth.username")}</label>
+                    <label className="block text-text-secondary">{lang("AUTH_USERNAME")}</label>
                     <input
                         name="username"
                         type="text"
@@ -56,7 +56,7 @@ export const RegisterModal = ({ isOpen, onClose, onSwitch }: Props) => {
                 </div>
 
                 <div>
-                    <label className="block text-text-secondary">{lang("auth.password")}</label>
+                    <label className="block text-text-secondary">{lang("AUTH_PASSWORD")}</label>
                     <input
                         name="password"
                         type="password"
@@ -71,12 +71,12 @@ export const RegisterModal = ({ isOpen, onClose, onSwitch }: Props) => {
                     type="submit"
                     className="w-full bg-accent text-white py-2 rounded-md hover:opacity-90 transition"
                 >
-                    {lang("auth.register")}
+                    {lang("AUTH_REGISTER")}
                 </button>
             </form>
             <p className="text-sm mt-4 text-text-muted">
-                {lang("auth.already_have_account")}{" "}
-                <button onClick={onSwitch} className="text-accent hover:underline">{lang("auth.login.login_here")}</button>
+                {lang("AUTH_ALREADY_HAVE_ACCOUNT")}{" "}
+                <button onClick={onSwitch} className="text-accent hover:underline">{lang("AUTH_LOGIN_LOGIN_HERE")}</button>
             </p>
         </Modal>
     );

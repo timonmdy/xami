@@ -1,146 +1,122 @@
 import Cookies from "js-cookie";
+import {AuthResponse} from "../types/Auth.types.ts";
 
 export class FetchError extends Error {
-  response: Response;
-  status: number;
-  statusText: string;
-  body: string | null;
+    response: Response;
+    status: number;
+    statusText: string;
+    body: string | null;
 
-  constructor(message: string, response: Response, body: string | null) {
-    super(message);
-    this.name = "FetchError";
-    this.response = response;
-    this.status = response.status;
-    this.statusText = response.statusText;
-    this.body = body;
-  }
+    constructor(message: string, response: Response, body: string | null) {
+        super(message);
+        this.name = "FetchError";
+        this.response = response;
+        this.status = response.status;
+        this.statusText = response.statusText;
+        this.body = body;
+    }
 }
 
 export class FetchWrapper {
-  private static get accessToken(): string | undefined {
-    return Cookies.get("accessToken");
-  }
-
-  private static get refreshToken(): string | undefined {
-    return Cookies.get("refresh_token");
-  }
-
-  static async get<T>(url: string, options?: RequestInit): Promise<T> {
-    return this.request<T>("GET", url, undefined, options);
-  }
-
-  static async post<T>(url: string, body: unknown, options?: RequestInit): Promise<T> {
-    return this.request<T>("POST", url, body, options);
-  }
-
-  static async put<T>(url: string, body: unknown, options?: RequestInit): Promise<T> {
-    return this.request<T>("PUT", url, body, options);
-  }
-
-  static async patch<T>(url: string, body?: unknown, options?: RequestInit): Promise<T> {
-    return this.request<T>("PATCH", url, body, options);
-  }
-
-  static async delete<T>(url: string, options?: RequestInit): Promise<T> {
-    return this.request<T>("DELETE", url, undefined, options);
-  }
-
-  private static async request<T>(
-    method: string,
-    url: string,
-    body?: unknown,
-    options?: RequestInit,
-    retry = true
-  ): Promise<T> {
-    const headers: HeadersInit = {
-      "Content-Type": "application/json",
-      ...(this.accessToken ? { Authorization: `Bearer ${this.accessToken}` } : {}),
-      ...options?.headers,
-    };
-
-    const response = await fetch(url, {
-      method,
-      headers,
-      body: body ? JSON.stringify(body) : undefined,
-      ...options,
-    });
-
-    this.updateCookiesFromHeaders(response);
-
-    if (!this.accessToken && this.refreshToken || !response.ok && retry) {
-      const refreshed = await this.refreshAccessToken();
-      if (refreshed) {
-        return this.request<T>(method, url, body, options, false);
-      }
+    private static get accessToken(): string | undefined {
+        return Cookies.get("accessToken");
     }
 
-    if (!response.ok) {
-      const errorText = await this.safeParseError(response);
-      throw new FetchError(`${response.status} ${response.statusText}`, response, errorText);
+    static async get<T>(url: string, options?: RequestInit): Promise<T> {
+        return this.request<T>("GET", url, undefined, options);
     }
 
-    return this.parseResponse<T>(response);
-  }
+    static async post<T>(url: string, body: unknown, options?: RequestInit): Promise<T> {
+        return this.request<T>("POST", url, body, options);
+    }
 
-  public static async refreshAuthentication(): Promise<boolean> {
-    if(!this.refreshToken) return false;
-    return this.refreshAccessToken();
-  }
+    static async put<T>(url: string, body: unknown, options?: RequestInit): Promise<T> {
+        return this.request<T>("PUT", url, body, options);
+    }
 
-  private static async refreshAccessToken(): Promise<boolean> {
-    try {
-      const response = await fetch("/api/auth/refresh", {
-        method: "GET",
-        credentials: "include", // needed to send cookies
-      });
+    static async patch<T>(url: string, body?: unknown, options?: RequestInit): Promise<T> {
+        return this.request<T>("PATCH", url, body, options);
+    }
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data?.token) {
-          Cookies.set("accessToken", data.token, { sameSite: "Strict" });
-          return true;
+    static async delete<T>(url: string, options?: RequestInit): Promise<T> {
+        return this.request<T>("DELETE", url, undefined, options);
+    }
+
+    private static async request<T>(
+        method: string,
+        url: string,
+        body?: unknown,
+        options?: RequestInit,
+        retry = true
+    ): Promise<T> {
+        const headers: HeadersInit = {
+            "Content-Type": "application/json",
+            ...(this.accessToken ? {Authorization: `Bearer ${this.accessToken}`} : {}),
+            ...options?.headers,
+        };
+
+        const response = await fetch(url, {
+            method,
+            headers,
+            body: body ? JSON.stringify(body) : undefined,
+            credentials: "include", // Important for cookie-based auth
+            ...options,
+        });
+
+        if (response.status === 401 && retry) {
+            const refreshed = await this.refreshAccessToken();
+            if (refreshed) {
+                return this.request<T>(method, url, body, options, false);
+            }
         }
-      }
-    } catch (err) {
-      console.error("Token refresh failed", err);
+
+        if (!response.ok) {
+            const errorText = await this.safeParseError(response);
+            throw new FetchError(`${response.status} ${response.statusText}`, response, errorText);
+        }
+
+        return this.parseResponse<T>(response);
     }
-    return false;
-  }
 
-  private static updateCookiesFromHeaders(response: Response) {
-    const header = response.headers.get("refresh_cookie");
-    if (!header) return;
-
-    header.split(",").forEach((h) => {
-      const match = h.match(/refresh_token=([^;]+)/);
-      if (match?.[1]) {
-        Cookies.set("refresh_token", match[1], { sameSite: "Strict" });
-      }
-    });
-  }
-
-  private static async parseResponse<T>(response: Response): Promise<T> {
-    const contentType = response.headers.get("Content-Type") || "";
-
-    if (contentType.includes("application/json")) {
-      return response.json();
-    } else if (
-      contentType.includes("text/") ||
-      contentType.includes("application/xml") ||
-      contentType.includes("application/x-www-form-urlencoded")
-    ) {
-      return response.text() as unknown as T;
-    } else {
-      return response.text() as unknown as T;
+    public static async refreshAuthentication(): Promise<boolean> {
+        return this.refreshAccessToken();
     }
-  }
 
-  private static async safeParseError(response: Response): Promise<string | null> {
-    try {
-      const data = await response.text();
-      return data || null;
-    } catch {
-      return null;
+    private static async refreshAccessToken(): Promise<boolean> {
+        try {
+            const response = await fetch("/api/auth/refresh", {
+                method: "GET",
+                credentials: "include", // Ensure refresh_token is sent
+            });
+
+            if (!response.ok) {
+                return false;
+            }
+
+            const data: AuthResponse = await response.json() as unknown as AuthResponse;
+            Cookies.set("accessToken", data.token, {sameSite: "Strict"});
+            return true;
+        } catch (err) {
+            console.error("Token refresh failed", err);
+        }
+        return false;
     }
-  }
+
+    private static async parseResponse<T>(response: Response): Promise<T> {
+        const contentType = response.headers.get("Content-Type") || "";
+
+        if (contentType.includes("application/json")) {
+            return response.json();
+        } else {
+            return await response.text() as unknown as T;
+        }
+    }
+
+    private static async safeParseError(response: Response): Promise<string | null> {
+        try {
+            return await response.text();
+        } catch {
+            return null;
+        }
+    }
 }

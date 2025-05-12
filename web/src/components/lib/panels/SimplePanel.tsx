@@ -1,19 +1,17 @@
-import React, { useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
+import React, {useState} from "react";
+import {FaChevronDown} from "react-icons/fa";
 import Button from "../buttons/StyledButton";
 import Card from "../cards/StyledCard";
-import DropdownMenu, { SimpleDropdownMenuOption } from "../dropdown/SimpleDropdownMenu";
 
 interface PanelProps {
     title: string;
     icon?: React.ReactNode;
     children: React.ReactNode;
-    dropdownOptions?: SimpleDropdownMenuOption[];
     className?: string;
     titleClassName?: string;
 }
 
-const Panel: React.FC<PanelProps> = ({ title, icon, children, dropdownOptions, className = "", titleClassName = "" }) => {
+const Panel: React.FC<PanelProps> = ({ title, icon, children, className = "", titleClassName = "" }) => {
     const [collapsed, setCollapsed] = useState(false);
 
     return (
@@ -24,7 +22,6 @@ const Panel: React.FC<PanelProps> = ({ title, icon, children, dropdownOptions, c
                     <h2 className={`text-lg font-semibold pl-2`}>{title}</h2>
                 </div>
                 <div className="flex items-center gap-2">
-                    {dropdownOptions && <DropdownMenu options={dropdownOptions} />}
                     <Button variant="ghost" onClick={() => setCollapsed(!collapsed)}>
                         <FaChevronDown className={`transition-transform ${collapsed ? "" : "rotate-180"}`} />
                     </Button>
