@@ -1,0 +1,54 @@
+package com.timonmdy.xami.commands.users;
+
+import com.timonmdy.xami.domain.models.users.User;
+import com.timonmdy.xami.domain.models.users.notifications.NotificationSeverity;
+import com.timonmdy.xami.domain.models.users.notifications.NotificationType;
+import com.timonmdy.xami.domain.models.users.notifications.UserNotification;
+import com.timonmdy.xami.domain.repositories.UserRepository;
+import com.timonmdy.xami.service.users.notifications.UserNotificationService;
+import lombok.AllArgsConstructor;
+import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
+
+import java.util.Optional;
+
+@ShellComponent
+@AllArgsConstructor
+public class UserNotificationCommands {
+
+    private final UserNotificationService notificationService;
+    private final UserRepository userRepository;
+
+    @ShellMethod(key = "addNotification", value = "Create a notification for a user")
+    public String addNotification(
+            @ShellOption(help = "Username") String username,
+            @ShellOption(help = "Title") String title,
+            @ShellOption(help = "Description") String description,
+            @ShellOption(defaultValue = "ACCOUNT", help = "Type [ACCOUNT, CONTENT, APPLICATION]") NotificationType type,
+            @ShellOption(defaultValue = "NORMAL", help = "Severity [VERY_HIGH, HIGH, NORMAL]") NotificationSeverity severity,
+            @ShellOption(defaultValue = "MdInfoOutline", help = "React icon name") String icon,
+            @ShellOption(defaultValue = ShellOption.NULL, help = "Target URL") String targetUrl,
+            @ShellOption(defaultValue = ShellOption.NULL, help = "Content ID (for future use)") String contentId
+    ) {
+        Optional<User> optionalUser = userRepository.findByUsernameIgnoreCase(username);
+        if (optionalUser.isEmpty()) {
+            return "User not found: " + username;
+        }
+
+        User user = optionalUser.get();
+
+        UserNotification created = notificationService.createNotification(
+                user,
+                type,
+                severity,
+                icon,
+                title,
+                description,
+                targetUrl,
+                contentId
+        );
+
+        return "Notification created with ID: " + created.getId();
+    }
+}

@@ -1,7 +1,9 @@
 package com.timonmdy.xami.api.controller.auth;
 
+
 import com.timonmdy.xami.api.dto.auth.AuthRequest;
 import com.timonmdy.xami.api.dto.auth.AuthResponse;
+import com.timonmdy.xami.api.dto.auth.RefreshTokenResponse;
 import com.timonmdy.xami.api.dto.auth.RegisterRequest;
 import com.timonmdy.xami.core.security.jwt.JwtUtil;
 import com.timonmdy.xami.domain.models.users.User;
@@ -64,17 +66,17 @@ public class AuthController {
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<AuthResponse> refresh(HttpServletRequest request) {
+    public ResponseEntity<RefreshTokenResponse> refresh(HttpServletRequest request) {
         String refreshToken = jwtUtil.extractTokenFromCookie(request, "refresh_token");
 
         if (refreshToken == null || !refreshTokenService.validateRefreshToken(refreshToken)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.ok(new RefreshTokenResponse(false, null, "Refresh token invalid or expired."));
         }
 
         String username = refreshTokenService.getUsernameFromRefreshToken(refreshToken);
-        String newAccessToken = refreshTokenService.createRefreshToken(username).getToken();
+        String newAccessToken = jwtUtil.generateToken(username);
 
-        return ResponseEntity.ok(new AuthResponse(newAccessToken));
+        return ResponseEntity.ok(new RefreshTokenResponse(true, newAccessToken, "Token refreshed successfully."));
     }
 
     @GetMapping("/isAuthenticated")

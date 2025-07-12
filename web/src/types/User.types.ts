@@ -10,3 +10,24 @@ export interface ChangeRoleRequest {
     username: string;
     role: UserRole;
 }
+
+export type NotificationType = "ACCOUNT" | "CONTENT" | "APPLICATION";
+
+export type NotificationSeverity = "VERY_HIGH" | "HIGH" | "NORMAL";
+
+export interface NotificationClickAction {
+    targetUrl?: string;
+    contentId?: string;
+}
+
+export interface UserNotification {
+    id: number;
+    type: NotificationType;
+    severity: NotificationSeverity;
+    icon: string;
+    title: string;
+    description: string;
+    seen: boolean;
+    targetUrl?: string;
+    contentId?: string;
+}

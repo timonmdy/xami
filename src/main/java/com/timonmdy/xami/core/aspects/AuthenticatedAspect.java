@@ -30,7 +30,7 @@ public class AuthenticatedAspect {
      *
      * @see com.timonmdy.xami.core.annotations.Authenticated
      */
-    @Around("@annotation(authenticated)")
+    @Around("@annotation(com.timonmdy.xami.core.annotations.Authenticated)")
     public Object checkAuthorization(ProceedingJoinPoint joinPoint) throws Throwable {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);

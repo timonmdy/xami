@@ -11,3 +11,9 @@ export interface AuthRequest {
 export interface AuthResponse {
     token: string;
 }
+
+export interface RefreshTokenResponse {
+    success: boolean;
+    accessToken: string;
+    message: string;
+}

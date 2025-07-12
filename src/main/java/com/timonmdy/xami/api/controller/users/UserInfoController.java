@@ -22,7 +22,7 @@ public class UserInfoController {
 
     @Authenticated
     @GetMapping("/self")
-    public ResponseEntity<UserDto> getUsername(User user) {
+    public ResponseEntity<UserDto> getSelf(User user) {
         return ResponseEntity.ok(new UserDto(user));
     }
 

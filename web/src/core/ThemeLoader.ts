@@ -17,7 +17,6 @@ const applyThemeVariables = (themeVars: Record<string, string>) => {
 };
 const applyTheme = async (): Promise<void> => {
     const selectedTheme = getUserSelectedTheme();
-
     const loadTheme = async (themeName: string) => {
         try {
             const theme = await fetchTheme(themeName);

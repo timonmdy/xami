@@ -1,11 +1,12 @@
-import {StrictMode} from 'react'
-import {createRoot} from 'react-dom/client'
-import './index.css'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import App from './components/App'
-import {QueryClient, QueryClientProvider} from 'react-query'
+import NoApiConnectionPage from './components/pages/error/NoApiConnectionPage'
+import { hasAPIConnection, printEnvironmentInfo, printUserInfo } from './core/Environment'
 import fetchTranslations from './core/LanguageLoader'
-import {name, version} from "../package.json";
 import applyTheme from './core/ThemeLoader'
+import './index.css'
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -15,25 +16,38 @@ const queryClient = new QueryClient({
     }
 });
 
-console.info(
-    `%cThis page is running %c${name} %cv${version} %c[${import.meta.env.MODE}]`,
-    'color: #ffffff;',
-    'color: #AB47BC; font-weight: 700;',
-    'color: #AB47BC; font-weight: 300;',
-    'color: #9E9E9E; font-style: italic;'
-);
+async function setup(): Promise<boolean> {
+    printEnvironmentInfo();
+    try {
+        await fetchTranslations();
+        await applyTheme();
+    } catch (error) {
+        console.error('Error during setup:', error);
+        return false;
+    }
 
-async function setup() {
-    await fetchTranslations();
-    await applyTheme();
+    await printUserInfo();
+    return true;
 }
 
-setup().then(() => {
-    createRoot(document.getElementById('root')!).render(
-        <StrictMode>
-            <QueryClientProvider client={queryClient}>
-                <App/>
-            </QueryClientProvider>
-        </StrictMode>
-    )
-});
+async function render() {
+    if (await hasAPIConnection()) {
+        setup().then(() => {
+            createRoot(document.getElementById('root')!).render(
+                <StrictMode>
+                    <QueryClientProvider client={queryClient}>
+                        <App />
+                    </QueryClientProvider>
+                </StrictMode>
+            )
+        });
+    } else {
+        createRoot(document.getElementById('root')!).render(
+            <StrictMode>
+                <NoApiConnectionPage />
+            </StrictMode>
+        )
+    }
+}
+
+render();

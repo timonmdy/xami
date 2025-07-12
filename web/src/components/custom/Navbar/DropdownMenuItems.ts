@@ -1,12 +1,14 @@
 import {NavbarDropdownItemConfig} from "../../../config/Navbar.config.ts";
-import {getNavbarSubmenu} from "./NavbarSubmenuController.tsx";
+import {getNavbarSubmenu, NavbarSubmenuProps} from "./NavbarSubmenuController.tsx";
 import React from "react";
+import {LanguageKeyType} from "../../../config/Language.config.ts";
 
 export const buildNavbarDropdownItems = (
     items: NavbarDropdownItemConfig[],
-    lang: (key: string) => string,
+    lang: (key: LanguageKeyType) => string,
     isAuthenticated: boolean,
-    handlers: Record<string, () => void>
+    handlers: Record<string, () => void>,
+    submenuProps: NavbarSubmenuProps
 ) => {
     return items
         .filter(item =>
@@ -21,7 +23,7 @@ export const buildNavbarDropdownItems = (
             };
 
             if (item.submenuKey) {
-                const submenu = getNavbarSubmenu(item.submenuKey);
+                const submenu = getNavbarSubmenu(item.submenuKey, submenuProps);
                 if (submenu) return { ...common, submenu };
             }
 

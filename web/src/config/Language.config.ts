@@ -1,4 +1,5 @@
-// languageIndex.ts
+import i18n from "i18next";
+
 export const LanguageKey = {
     ERROR_PAGE_NOT_FOUND: "error.page_not_found",
     ERROR_UNEXPECTED: "error.unexpected",
@@ -24,14 +25,35 @@ export const LanguageKey = {
     NAVBAR_MENU: "navbar.menu",
     NAVBAR_NOTIFICATIONS: "navbar.notifications",
     NAVBAR_APPS: "navbar.apps",
-    NAVBAR_PROFILE: "navbar.profile",
+    NAVBAR_SEARCH_PLACEHOLDER: "navbar.search.placeholder",
+    NAVBAR_DROPDOWN_PROFILE: "navbar.dropdown.profile",
+    NAVBAR_DROPDOWN_LANGUAGE: "navbar.dropdown.language",
+    NAVBAR_DROPDOWN_THEME: "navbar.dropdown.theme",
+    NAVBAR_DROPDOWN_SETTINGS: "navbar.dropdown.settings",
     NAVBAR_DROPDOWN_LOGIN: "navbar.dropdown.login",
     NAVBAR_DROPDOWN_REGISTER: "navbar.dropdown.register",
-    NAVBAR_DROPDOWN_LOGOUT: "navbar.dropdown.logout"
+    NAVBAR_DROPDOWN_LOGOUT: "navbar.dropdown.logout",
+    NAVBAR_SELECT_LANGUAGE: "navbar.select.language.title",
+    NAVBAR_SELECT_THEME: "navbar.select.theme.title",
+    NAVBAR_SELECT_MORE: "navbar.select.more",
+
+    SIDEBAR_HOME: "sidebar.home",
+    SIDEBAR_DISCOVER: "sidebar.discover",
+    SIDEBAR_SAVED: "sidebar.saved",
+    SIDEBAR_HISTORY: "sidebar.history",
+
+    HOMEPAGE_RECENTLY_WATCHED: "Recently watched",
+    COMMON_SEE_MORE: "See more",
 } as const;
 
 export type LanguageKeyType = keyof typeof LanguageKey;
 
-export const getLanguageKey = (key: LanguageKeyType): string => {
-    return LanguageKey[key];
+/**
+ * Only to be used when not possible in any other way.<br/>
+ * Please consider using the `useLang()` hook instead.
+ *
+ * @param key
+ */
+export const getLanguage = (key: LanguageKeyType): string => {
+    return i18n.t(LanguageKey[key]);
 }

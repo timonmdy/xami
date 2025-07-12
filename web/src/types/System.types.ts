@@ -1,3 +1,8 @@
+export interface SystemPing {
+    status: string;
+    timestamp: string;
+}
+
 export interface HardwareStats {
     processCPUUsage: number; // Percent
     totalMemoryMiB: number;

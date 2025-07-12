@@ -6,11 +6,13 @@ import { fetchSearchResults } from '../../../service/Search.service';
 import { SearchResult } from '../../../types/Search.types';
 import { MAX_SEARCH_RESULTS } from '../../../config/Search.config';
 import {useNavigate} from "react-router";
+import {useLang} from "../../../hooks/Language.hooks.ts";
 
 
 
 const NavbarSearch: React.FC = () => {
   const navigate = useNavigate();
+  const lang = useLang();
 
   const [search, setSearch] = useState('');
   const [showResults, setShowResults] = useState(false);
@@ -55,7 +57,7 @@ const NavbarSearch: React.FC = () => {
         onFocus={() => {
           if (results.length > 0) setShowResults(true);
         }}
-        placeholder="Search..."
+        placeholder={lang('NAVBAR_SEARCH_PLACEHOLDER')}
       />
 
       {search && showResults && topResults.length > 0 && (

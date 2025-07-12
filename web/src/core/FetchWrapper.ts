@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import {AuthResponse} from "../types/Auth.types.ts";
+import { RefreshTokenResponse } from "../types/Auth.types";
 
 export class FetchError extends Error {
     response: Response;
@@ -51,7 +51,7 @@ export class FetchWrapper {
     ): Promise<T> {
         const headers: HeadersInit = {
             "Content-Type": "application/json",
-            ...(this.accessToken ? {Authorization: `Bearer ${this.accessToken}`} : {}),
+            ...(this.accessToken ? { Authorization: `Bearer ${this.accessToken}` } : {}),
             ...options?.headers,
         };
 
@@ -82,22 +82,25 @@ export class FetchWrapper {
         return this.refreshAccessToken();
     }
 
+    // Dein FetchWrapper.ts
     private static async refreshAccessToken(): Promise<boolean> {
         try {
             const response = await fetch("/api/auth/refresh", {
                 method: "GET",
-                credentials: "include", // Ensure refresh_token is sent
+                credentials: "include",
             });
 
-            if (!response.ok) {
+            const data: RefreshTokenResponse = await response.json();
+
+            if (data.success && data.accessToken) {
+                Cookies.set("accessToken", data.accessToken, { sameSite: "Strict" });
+                return true;
+            } else {
                 return false;
             }
 
-            const data: AuthResponse = await response.json() as unknown as AuthResponse;
-            Cookies.set("accessToken", data.token, {sameSite: "Strict"});
-            return true;
         } catch (err) {
-            console.error("Token refresh failed", err);
+            console.error("Token refresh failed due to network issue or malformed response:", err);
         }
         return false;
     }

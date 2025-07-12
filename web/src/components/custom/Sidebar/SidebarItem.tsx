@@ -1,14 +1,18 @@
 import { IconType } from "react-icons";
 import { NavLink } from "react-router";
 import { Tooltip } from "react-tooltip";
+import { LanguageKeyType } from "../../../config/Language.config";
+import { useLang } from "../../../hooks/Language.hooks";
 
 interface SidebarItemProps {
     icon: IconType;
-    label: string;
+    label: LanguageKeyType;
     to: string;
     expanded: boolean;
 }
 export default function SidebarItem({ icon: Icon, label, to, expanded }: SidebarItemProps) {
+    const lang = useLang();
+
     return (
         <NavLink
             to={to}
@@ -19,10 +23,10 @@ export default function SidebarItem({ icon: Icon, label, to, expanded }: Sidebar
             data-tooltip-id={!expanded ? label : undefined}
         >
             <Icon className="text-xl shrink-0" />
-            {expanded && <span className="truncate">{label}</span>}
+            {expanded && <span className="truncate">{lang(label)}</span>}
             {!expanded && (
                 <Tooltip id={label} place="right">
-                    {label}
+                    {lang(label)}
                 </Tooltip>
             )}
         </NavLink>

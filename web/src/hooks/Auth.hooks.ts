@@ -10,6 +10,8 @@ export const useIsAuthenticated = () => {
     cacheTime: 1000 * 60 * 10, // 10 minutes
     retry: false, // don't retry on 401
     refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
     onError: () => {}
   });
 
@@ -19,7 +21,7 @@ export const useIsAuthenticated = () => {
         if(!refreshed) return; // User is really not authenticated (no valid refresh token)
         query.refetch();
       });
-    } catch {}
+    } catch { /* Avoid error logging to the console */ }
   }
 
   window.addEventListener("refetchAuth", () => query.refetch());

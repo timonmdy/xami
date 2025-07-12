@@ -1,23 +1,27 @@
 import LanguageSubmenu from "./Submenus/LanguageSubmenu.tsx";
 import {SubmenuDefinition} from "../../lib/dropdown/Dropdown.tsx";
-import { getLanguageKey } from "../../../config/Language.config.ts";
 import UnknownSubmenu from "./Submenus/UnknownSubmenu.tsx";
 import ThemeSubmenu from "./Submenus/ThemeSubmenu.tsx";
-export const getNavbarSubmenu = (key: string): SubmenuDefinition => {
+
+export interface NavbarSubmenuProps {
+    closeDropdown: () => void;
+}
+
+export const getNavbarSubmenu = (key: string, props: NavbarSubmenuProps): SubmenuDefinition => {
     switch (key) {
         case "language":
             return {
-                title: "Select a language",
-                content: <LanguageSubmenu />,
+                title: "NAVBAR_SELECT_LANGUAGE",
+                content: <LanguageSubmenu {...props} />,
             };
         case "theme":
             return {
-                title: "Select a theme",
-                content: <ThemeSubmenu />,
+                title: "NAVBAR_SELECT_THEME",
+                content: <ThemeSubmenu {...props} />,
             };
         default:
             return {
-                title: getLanguageKey("ERROR_UNEXPECTED"),
+                title: "ERROR_UNEXPECTED",
                 content: <UnknownSubmenu />,
             };
     }
