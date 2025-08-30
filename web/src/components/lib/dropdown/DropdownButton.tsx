@@ -5,10 +5,12 @@ export const DropdownButton = ({
                             icon,
                             label,
                             onClick,
+                            isOpen
                         }: {
     icon?: React.ReactNode;
     label?: string;
     onClick: () => void;
+    isOpen: boolean;
 }) => (
     <button
         onClick={onClick}
@@ -16,6 +18,6 @@ export const DropdownButton = ({
     >
         {icon}
         {label && <span>{label}</span>}
-        <FiChevronDown className="text-text-muted" />
+        <FiChevronDown className={`text-text-muted transition-transform ${isOpen ? "rotate-180" : ""}`} />
     </button>
 );

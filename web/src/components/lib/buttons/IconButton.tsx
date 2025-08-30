@@ -4,12 +4,14 @@ interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
   icon: React.ReactNode;
   iconFocus?: React.ReactNode;
   'aria-label': string;
+  onFocusChange?: (focused: boolean, target?: EventTarget & HTMLButtonElement) => void;
 }
 
 const IconButton: React.FC<IconButtonProps> = ({
   icon,
   iconFocus,
   className = '',
+  onFocusChange,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -19,10 +21,12 @@ const IconButton: React.FC<IconButtonProps> = ({
       {...props}
       onFocus={(e) => {
         setIsFocused(true);
+        onFocusChange?.(true, e.currentTarget);
         props.onFocus?.(e);
       }}
       onBlur={(e) => {
         setIsFocused(false);
+        onFocusChange?.(false, e.currentTarget);
         props.onBlur?.(e);
       }}
       className={`

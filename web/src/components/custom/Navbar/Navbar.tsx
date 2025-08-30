@@ -1,16 +1,17 @@
-import React, {useState} from "react";
-import {IoApps, IoAppsOutline, IoNotifications, IoNotificationsOutline, IoPersonCircleOutline,} from "react-icons/io5";
-import IconButton from "../../lib/buttons/IconButton";
-import {Dropdown} from "../../lib/dropdown/Dropdown";
-import {LoginModal} from "../Auth/LoginModal";
-import {RegisterModal} from "../Auth/RegisterModal";
-import NavbarSearch from "./NavbarSearch";
-import {HiOutlineMenu} from "react-icons/hi";
-import {navbarDropdownItems} from "../../../config/Navbar.config";
-import {useNavbarHandlers} from "../../../hooks/Navbar.hooks";
-import {buildNavbarDropdownItems} from "./DropdownMenuItems";
-import {useLang} from "../../../hooks/Language.hooks.ts";
+import React, { useState } from "react";
+import { HiOutlineMenu } from "react-icons/hi";
+import { IoApps, IoAppsOutline, IoPersonCircleOutline } from "react-icons/io5";
+import { navbarDropdownItems } from "../../../config/Navbar.config";
 import { useIsAuthenticated } from "../../../hooks/Auth.hooks.ts";
+import { useLang } from "../../../hooks/Language.hooks.ts";
+import { useNavbarHandlers } from "../../../hooks/Navbar.hooks";
+import IconButton from "../../lib/buttons/IconButton";
+import { Dropdown } from "../../lib/dropdown/Dropdown";
+import { LoginModal } from "../Auth/LoginModal";
+import { RegisterModal } from "../Auth/RegisterModal";
+import { buildNavbarDropdownItems } from "./DropdownMenuItems";
+import NavbarSearch from "./NavbarSearch";
+import NotificationsMenu from "./Notifications/NotificationsMenu.tsx";
 
 interface NavbarProps {
     onSidebarToggle: () => void;
@@ -59,13 +60,8 @@ const Navbar: React.FC<NavbarProps> = ({ onSidebarToggle }) => {
                         className="hidden md:inline-flex"
                         icon={<IoAppsOutline size={24} />}
                         iconFocus={<IoApps size={24} color="white" />}
-                    />
-                    <IconButton
-                        aria-label="Notifications"
-                        className="hidden md:inline-flex"
-                        icon={<IoNotificationsOutline size={24} />}
-                        iconFocus={<IoNotifications size={24} color="white" />}
-                    />
+                    />   
+                    <NotificationsMenu />
                     <Dropdown
                         icon={<IoPersonCircleOutline size={24} />}
                         items={dropdownItems}

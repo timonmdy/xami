@@ -1,7 +1,6 @@
 package com.timonmdy.xami.service.users.notifications;
 
 import com.timonmdy.xami.domain.models.users.User;
-import com.timonmdy.xami.domain.models.users.notifications.NotificationClickAction;
 import com.timonmdy.xami.domain.models.users.notifications.NotificationSeverity;
 import com.timonmdy.xami.domain.models.users.notifications.NotificationType;
 import com.timonmdy.xami.domain.models.users.notifications.UserNotification;
@@ -10,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,8 +26,7 @@ public class UserNotificationServiceImpl implements UserNotificationService {
             String icon,
             String title,
             String description,
-            String targetUrl,
-            String contentId
+            String targetUrl
     ) {
         UserNotification notification = new UserNotification();
         notification.setUser(user);
@@ -37,7 +36,8 @@ public class UserNotificationServiceImpl implements UserNotificationService {
         notification.setTitle(title);
         notification.setDescription(description);
         notification.setSeen(false);
-        notification.setClickAction(new NotificationClickAction(targetUrl, contentId));
+        notification.setLink(targetUrl);
+        notification.setCreatedAt(new Date());
 
         return notificationRepository.save(notification);
     }

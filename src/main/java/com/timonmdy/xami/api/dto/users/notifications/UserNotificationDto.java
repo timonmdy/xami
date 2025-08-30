@@ -5,6 +5,8 @@ import com.timonmdy.xami.domain.models.users.notifications.NotificationType;
 import com.timonmdy.xami.domain.models.users.notifications.UserNotification;
 import lombok.Getter;
 
+import java.util.Date;
+
 @Getter
 public class UserNotificationDto {
 
@@ -15,8 +17,9 @@ public class UserNotificationDto {
     private final String title;
     private final String description;
     private final boolean seen;
-    private final String targetUrl;
-    private final String contentId;
+    private final String link;
+    private final String notificationSystemVersion;
+    private final Date createdAt;
 
     public UserNotificationDto(UserNotification notification) {
         this.id = notification.getId();
@@ -26,13 +29,8 @@ public class UserNotificationDto {
         this.title = notification.getTitle();
         this.description = notification.getDescription();
         this.seen = notification.isSeen();
-
-        if (notification.getClickAction() != null) {
-            this.targetUrl = notification.getClickAction().getTargetUrl();
-            this.contentId = notification.getClickAction().getContentId();
-        } else {
-            this.targetUrl = null;
-            this.contentId = null;
-        }
+        this.link = notification.getLink();
+        this.notificationSystemVersion = notification.getNotificationSystemVersion();
+        this.createdAt = notification.getCreatedAt();
     }
 }

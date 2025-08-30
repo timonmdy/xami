@@ -15,8 +15,7 @@ public interface UserNotificationService {
             String icon,
             String title,
             String description,
-            String targetUrl,
-            String contentId // nullable
+            String targetUrl
     );
 
     List<UserNotification> getAllNotifications(User user);

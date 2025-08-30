@@ -7,6 +7,7 @@ import { hasAPIConnection, printEnvironmentInfo, printUserInfo } from './core/En
 import fetchTranslations from './core/LanguageLoader'
 import applyTheme from './core/ThemeLoader'
 import './index.css'
+import { FetchWrapper } from './core/FetchWrapper'
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -18,6 +19,7 @@ const queryClient = new QueryClient({
 
 async function setup(): Promise<boolean> {
     printEnvironmentInfo();
+    FetchWrapper.setup();
     try {
         await fetchTranslations();
         await applyTheme();

@@ -28,8 +28,7 @@ public class UserNotificationCommands {
             @ShellOption(defaultValue = "ACCOUNT", help = "Type [ACCOUNT, CONTENT, APPLICATION]") NotificationType type,
             @ShellOption(defaultValue = "NORMAL", help = "Severity [VERY_HIGH, HIGH, NORMAL]") NotificationSeverity severity,
             @ShellOption(defaultValue = "MdInfoOutline", help = "React icon name") String icon,
-            @ShellOption(defaultValue = ShellOption.NULL, help = "Target URL") String targetUrl,
-            @ShellOption(defaultValue = ShellOption.NULL, help = "Content ID (for future use)") String contentId
+            @ShellOption(defaultValue = "/profile/notifications", help = "Target URL") String targetUrl
     ) {
         Optional<User> optionalUser = userRepository.findByUsernameIgnoreCase(username);
         if (optionalUser.isEmpty()) {
@@ -45,8 +44,7 @@ public class UserNotificationCommands {
                 icon,
                 title,
                 description,
-                targetUrl,
-                contentId
+                targetUrl
         );
 
         return "Notification created with ID: " + created.getId();

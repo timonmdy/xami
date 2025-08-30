@@ -42,8 +42,20 @@ export const LanguageKey = {
     SIDEBAR_SAVED: "sidebar.saved",
     SIDEBAR_HISTORY: "sidebar.history",
 
+    NOTIFICATIONS_PLEASE_LOGIN: "notifications.please_login",
+    NOTIFICATIONS_TITLE: "notifications.title",
+    NOTIFICATIONS_MARK_ALL: "notifications.mark_all",
+    NOTIFICATIONS_VIEW_ALL: "notifications.view_all",
+    NOTIFICATIONS_EMPTY: "notifications.empty",
+    NOTIFICATIONS_ARIA_LABEL_OPEN_BUTTON: "notifications.aria_label_open_button",
+    NOTIFICATION_MARK_AS_READ: "notification.mark_as_read",
+    NOTIFICATION_DELETE: "notification.delete",
+
+
     HOMEPAGE_RECENTLY_WATCHED: "Recently watched",
     COMMON_SEE_MORE: "See more",
+
+
 } as const;
 
 export type LanguageKeyType = keyof typeof LanguageKey;

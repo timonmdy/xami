@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { SubmenuView } from "./DropdownSubmenuView";
 import { ItemList } from "./DropdownItemList";
 import { DropdownButton } from "./DropdownButton";
-import {LanguageKeyType} from "../../../config/Language.config.ts";
+import { LanguageKeyType } from "../../../config/Language.config.ts";
 
 export interface DropdownLinkItem {
   label: string;
@@ -34,13 +34,13 @@ export interface DropdownProps {
 }
 
 export const Dropdown: React.FC<DropdownProps> = ({
-                                                    label,
-                                                    icon,
-                                                    items,
-                                                    align = "right",
-                                                    isOpen,
-                                                    onOpenChange,
-                                                  }) => {
+  label,
+  icon,
+  items,
+  align = "right",
+  isOpen,
+  onOpenChange,
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const [internalOpen, setInternalOpen] = useState(false);
   const [submenu, setSubmenu] = useState<SubmenuDefinition | null>(null);
@@ -76,23 +76,23 @@ export const Dropdown: React.FC<DropdownProps> = ({
   }, [handleClickOutside]);
 
   const dropdownClasses = clsx(
-      "absolute mt-2 w-56 rounded-xl overflow-hidden shadow-lg bg-background border border-borders z-50 transition-all animate-fade-in",
-      align === "right" ? "right-0" : "left-0"
+    "absolute mt-2 w-56 rounded-xl overflow-hidden shadow-lg bg-background border border-borders z-50 transition-all animate-fade-in",
+    align === "right" ? "right-0" : "left-0"
   );
 
   return (
-      <div className="relative inline-block" ref={ref}>
-        <DropdownButton icon={icon} label={label} onClick={toggleDropdown} />
+    <div className="relative inline-block" ref={ref}>
+      <DropdownButton icon={icon} label={label} onClick={toggleDropdown} isOpen={open} />
 
-        {open && (
-            <div className={dropdownClasses}>
-              {submenu ? (
-                  <SubmenuView submenu={submenu} onBack={() => setSubmenu(null)} />
-              ) : (
-                  <ItemList items={items} onItemClick={handleItemClick} />
-              )}
-            </div>
-        )}
-      </div>
+      {open && (
+        <div className={dropdownClasses}>
+          {submenu ? (
+            <SubmenuView submenu={submenu} onBack={() => setSubmenu(null)} />
+          ) : (
+            <ItemList items={items} onItemClick={handleItemClick} />
+          )}
+        </div>
+      )}
+    </div>
   );
 };

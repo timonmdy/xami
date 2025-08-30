@@ -1,6 +1,8 @@
 import Cookies from "js-cookie";
 import { RefreshTokenResponse } from "../types/Auth.types";
 
+const REFRESH_TRIES_KEY = "auth-refresh-tries";
+
 export class FetchError extends Error {
     response: Response;
     status: number;
@@ -82,8 +84,11 @@ export class FetchWrapper {
         return this.refreshAccessToken();
     }
 
-    // Dein FetchWrapper.ts
     private static async refreshAccessToken(): Promise<boolean> {
+        if(this.getRefreshTries() >= 3) {
+            return false;
+        }
+
         try {
             const response = await fetch("/api/auth/refresh", {
                 method: "GET",
@@ -96,6 +101,7 @@ export class FetchWrapper {
                 Cookies.set("accessToken", data.accessToken, { sameSite: "Strict" });
                 return true;
             } else {
+                sessionStorage.setItem(REFRESH_TRIES_KEY, (this.getRefreshTries() + 1).toString());
                 return false;
             }
 
@@ -121,5 +127,13 @@ export class FetchWrapper {
         } catch {
             return null;
         }
+    }
+
+    private static getRefreshTries(): number {
+        return parseInt(sessionStorage.getItem(REFRESH_TRIES_KEY)!) || 0;
+    }
+
+    public static async setup() {
+        sessionStorage.removeItem(REFRESH_TRIES_KEY);
     }
 }

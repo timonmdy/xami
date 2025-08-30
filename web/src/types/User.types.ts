@@ -15,11 +15,6 @@ export type NotificationType = "ACCOUNT" | "CONTENT" | "APPLICATION";
 
 export type NotificationSeverity = "VERY_HIGH" | "HIGH" | "NORMAL";
 
-export interface NotificationClickAction {
-    targetUrl?: string;
-    contentId?: string;
-}
-
 export interface UserNotification {
     id: number;
     type: NotificationType;
@@ -28,6 +23,7 @@ export interface UserNotification {
     title: string;
     description: string;
     seen: boolean;
-    targetUrl?: string;
-    contentId?: string;
+    link: string;
+    notificationSystemVersion?: string;
+    createdAt: Date;
 }

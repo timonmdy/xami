@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -39,10 +41,16 @@ public class UserNotification {
     @Column(nullable = false)
     private boolean seen = false;
 
-    @Embedded
-    private NotificationClickAction clickAction;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String link;
+
+    @Column(nullable = false)
+    private Date createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(nullable = false)
+    private String notificationSystemVersion = "1.0";
 }
