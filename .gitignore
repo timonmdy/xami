@@ -1,13 +1,10 @@
-target/
 !.mvn/wrapper/maven-wrapper.jar
 /.mvn/wrapper/maven-wrapper.properties
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-/data/
-/logs/
-/config/
-/modules/
+/runtime/
+target/
 
 ### STS ###
 .apt_generated

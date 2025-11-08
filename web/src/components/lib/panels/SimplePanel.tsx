@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {FaChevronDown} from "react-icons/fa";
-import Button from "../buttons/StyledButton";
-import Card from "../cards/StyledCard";
+import Button from "../Buttons/StyledButton";
+import Card from "../Cards/StyledCard";
 
 interface PanelProps {
     title: string;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.timonmdy</groupId>
     <artifactId>xami</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <name>xami</name>
     <description>eXtensible Accessible Media Interface</description>
     <url/>
@@ -124,12 +124,36 @@
 
     <build>
         <plugins>
+            <!-- Create a runtime dir for development runs -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>create-runtime-dir</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="./runtime"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+                <inherited>false</inherited>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- Using dev as the default profile when using spring-boot:run. When installing, the profile from application.yml is used. -->
                     <jvmArguments>-Dspring.profiles.active=dev</jvmArguments>
+                    <!-- Set the working directory to avoid cluttering the development directory -->
+                    <workingDirectory>./runtime</workingDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -139,6 +163,7 @@
                     </execution>
                 </executions>
             </plugin>
+
 
             <!-- Lombok Annotation Processor -->
             <plugin>

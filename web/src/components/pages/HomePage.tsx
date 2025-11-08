@@ -1,7 +1,7 @@
 import { FiLoader } from "react-icons/fi";
 import { useLang } from "../../hooks/Language.hooks.ts";
-import { ButtonCard } from "../lib/cards/ButtonCard.tsx";
-import { Carousel } from "../lib/layout/Carousel.tsx";
+import { ButtonCard } from "../lib/Cards/ButtonCard.tsx";
+import { Carousel } from "../lib/Layout/Carousel.tsx";
 
 export default function HomePage() {
     const lang = useLang();

@@ -30,6 +30,15 @@ public class LoginEntryPoint implements AuthenticationEntryPoint {
     public void commence(@NonNull HttpServletRequest request,
                          @NonNull HttpServletResponse response,
                          @NonNull AuthenticationException authException) throws IOException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+
+        String status = (String) request.getAttribute("AUTH_STATUS");
+
+        if ("UNAUTHENTICATED".equals(status)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication required"); // 401
+        } else if ("FORBIDDEN".equals(status)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied"); // 403
+        } else {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication required");
+        }
     }
 }

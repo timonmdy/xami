@@ -1,17 +1,35 @@
-import { Route, Routes } from "react-router";
-import { useState } from "react";
+import { Route, Routes, useLocation } from "react-router";
+import { useEffect, useState } from "react";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/lib/NotFoundPage";
 import Navbar from "./custom/Navbar/Navbar";
 import Sidebar from "./custom/Sidebar/Sidebar";
 import { getStorageValue, setStorageValue } from "../storage/StorageProvider.ts";
+import ContentDetailPage from "./pages/detail/ContentDetailPage.tsx";
+import GenericErrorPage from "./pages/error/GenericErrorPage.tsx";
 
 export default function AppRoutes() {
+    const location = useLocation();
+    const [errorCode, setErrorCode] = useState<string>("");
     const [sidebarLocked, setSidebarLocked] = useState<boolean>(getStorageValue("sidebarLocked") as boolean);
+
+    useEffect(() => {
+        fetch(window.location.pathname, { method: "HEAD" })
+            .then((res) => {
+                const code = res.headers.get("X-Frontend-Error-Code");
+                if (code) setErrorCode(code);
+                else setErrorCode("");
+            })
+            .catch(() => setErrorCode("500"));
+    }, [location]);
 
     function changeSidebarLock(locked: boolean) {
         setSidebarLocked(locked);
         setStorageValue("sidebarLocked", locked);
+    }
+
+    if (errorCode) {
+        return <GenericErrorPage errorCode={errorCode} />
     }
 
     return (
@@ -24,6 +42,7 @@ export default function AppRoutes() {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="*" element={<NotFoundPage />} />
+                        <Route path="/detail/:contentId" element={<ContentDetailPage />} />
                     </Routes>
                 </main>
             </div>

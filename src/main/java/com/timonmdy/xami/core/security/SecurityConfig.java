@@ -1,7 +1,10 @@
 package com.timonmdy.xami.core.security;
 
+import com.timonmdy.xami.core.security.deciders.RoleDecider;
 import com.timonmdy.xami.core.security.jwt.JwtAuthenticationFilter;
 import com.timonmdy.xami.core.security.jwt.JwtUtil;
+import com.timonmdy.xami.domain.models.users.UserRole;
+import com.timonmdy.xami.service.auth.AuthHeaderService;
 import com.timonmdy.xami.service.auth.AuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +16,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,24 +56,22 @@ public class SecurityConfig {
      * @throws Exception in case of configuration errors
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(@NonNull HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(@NonNull HttpSecurity http, AuthHeaderService authHeaderService) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        /*
-                         * Uncomment the following line to require authentication for all API requests.
-                         * Currently, the system allows access for guests and registered users.
-                         * Admin/user-specific access is controlled via @Authenticated aspect elsewhere.
-                         *
-                         * .requestMatchers("/api/**").authenticated()
-                         */
+                        .requestMatchers("/h2-console/**").access(new RoleDecider(authHeaderService, UserRole.DB_ADMIN))
                         .anyRequest().permitAll()
                 )
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(new LoginEntryPoint()))
+                .exceptionHandling(
+                        exception -> exception
+                                .authenticationEntryPoint(new LoginEntryPoint())
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // allow H2 frames
                 .build();
     }
 

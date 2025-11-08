@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useQuery } from 'react-query';
-import SearchBar from '../../lib/form/SearchBar';
+import SearchBar from '../../lib/Form/SearchBar.tsx';
 import { fetchSearchResults } from '../../../service/Search.service';
 import { SearchResult } from '../../../types/Search.types';
 import { MAX_SEARCH_RESULTS } from '../../../config/Search.config';

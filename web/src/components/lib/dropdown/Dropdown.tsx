@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import clsx from "clsx";
-import { SubmenuView } from "./DropdownSubmenuView";
-import { ItemList } from "./DropdownItemList";
-import { DropdownButton } from "./DropdownButton";
+import { SubmenuView } from "./DropdownSubmenuView.tsx";
+import { ItemList } from "./DropdownItemList.tsx";
+import { DropdownButton } from "./DropdownButton.tsx";
 import { LanguageKeyType } from "../../../config/Language.config.ts";
 
 export interface DropdownLinkItem {

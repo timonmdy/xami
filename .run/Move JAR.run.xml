@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="Move JAR" type="BatchConfigurationType" factoryName="Batch"
+                   folderName="deploy">
+        <module name="xami"/>
+        <option name="INTERPRETER_OPTIONS" value=""/>
+        <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$"/>
+        <option name="PARENT_ENVS" value="true"/>
+        <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dev/lifecycle/deployJar.bat"/>
+        <option name="PARAMETERS" value="C:\Users\Timon\Development\Servers\Projects\xami-current"/>
+        <method v="2"/>
+    </configuration>
+</component>

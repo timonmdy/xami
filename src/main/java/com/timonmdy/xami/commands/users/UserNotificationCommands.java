@@ -20,7 +20,7 @@ public class UserNotificationCommands {
     private final UserNotificationService notificationService;
     private final UserRepository userRepository;
 
-    @ShellMethod(key = "addNotification", value = "Create a notification for a user")
+    @ShellMethod(value = "Create a notification for a user")
     public String addNotification(
             @ShellOption(help = "Username") String username,
             @ShellOption(help = "Title") String title,

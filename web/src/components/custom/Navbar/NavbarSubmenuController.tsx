@@ -1,5 +1,5 @@
 import LanguageSubmenu from "./Submenus/LanguageSubmenu.tsx";
-import {SubmenuDefinition} from "../../lib/dropdown/Dropdown.tsx";
+import {SubmenuDefinition} from "../../lib/Dropdown/Dropdown.tsx";
 import UnknownSubmenu from "./Submenus/UnknownSubmenu.tsx";
 import ThemeSubmenu from "./Submenus/ThemeSubmenu.tsx";
 

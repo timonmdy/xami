@@ -4,7 +4,7 @@ import { IoNotifications, IoNotificationsOutline } from "react-icons/io5";
 import { useNavigate } from "react-router";
 import { useIsAuthenticated } from "../../../../hooks/Auth.hooks";
 import { useNotifications } from "../../../../hooks/User.hooks";
-import IconButton from "../../../lib/buttons/IconButton";
+import IconButton from "../../../lib/Buttons/IconButton";
 import Notification from "./Notification";
 import { MdDoneAll } from "react-icons/md";
 import { Tooltip } from "react-tooltip";
