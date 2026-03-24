@@ -24,7 +24,7 @@ public class WebResourceConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         // Forward all frontend routes to index.html EXCEPT known static paths like /api, /static, /assets, etc.
         registry.addViewController("/").setViewName("forward:/index.html");
-        registry.addViewController("/{spring:^(?!api|static|assets|.*\\..*).*$}/**")
+        registry.addViewController("/{spring:^(?!api|static|assets|h2-console|.*\\..*).*$}/**")
                 .setViewName("forward:/index.html");
     }
 

@@ -16,9 +16,11 @@ spring:
   h2:
     console:
       enabled: true
+      path: /h2-console
       settings:
         web-allow-others: true
         web-default-url: jdbc:h2:file:./data/db
+
   jpa:
     hibernate:
       ddl-auto: update

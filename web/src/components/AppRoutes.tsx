@@ -5,8 +5,8 @@ import NotFoundPage from "./pages/lib/NotFoundPage";
 import Navbar from "./custom/Navbar/Navbar";
 import Sidebar from "./custom/Sidebar/Sidebar";
 import { getStorageValue, setStorageValue } from "../storage/StorageProvider.ts";
-import ContentDetailPage from "./pages/detail/ContentDetailPage.tsx";
 import GenericErrorPage from "./pages/error/GenericErrorPage.tsx";
+import SettingsPage from "./pages/SettingsPage.tsx";
 
 export default function AppRoutes() {
     const location = useLocation();
@@ -42,7 +42,7 @@ export default function AppRoutes() {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="*" element={<NotFoundPage />} />
-                        <Route path="/detail/:contentId" element={<ContentDetailPage />} />
+                        <Route path="/settings" element={<SettingsPage />} />
                     </Routes>
                 </main>
             </div>

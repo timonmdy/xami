@@ -33,6 +33,8 @@ public class LoginEntryPoint implements AuthenticationEntryPoint {
 
         String status = (String) request.getAttribute("AUTH_STATUS");
 
+        System.out.println(status);
+
         if ("UNAUTHENTICATED".equals(status)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication required"); // 401
         } else if ("FORBIDDEN".equals(status)) {

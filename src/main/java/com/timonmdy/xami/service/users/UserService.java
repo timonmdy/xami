@@ -52,4 +52,8 @@ public class UserService {
     public User save(User user) {
         return userRepository.save(user);
     }
+
+    public Optional<User> Get(Long userId) {
+        return null;
+    }
 }

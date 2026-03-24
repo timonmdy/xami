@@ -14,7 +14,7 @@ export default defineConfig({
       allowedHosts: ["perch-brief-gazelle.ngrok-free.app"],
       proxy: {
         '/api': {
-          target: 'http://localhost:7465',
+          target: 'http://localhost:7777',
           changeOrigin: true,
           secure: false,
         }

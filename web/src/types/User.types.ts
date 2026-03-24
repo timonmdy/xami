@@ -27,3 +27,16 @@ export interface UserNotification {
     notificationSystemVersion?: string;
     createdAt: Date;
 }
+
+export type UserSettingKey = "theme" | "language";
+
+export interface UserSetting {
+    key: string;
+    value: any;
+    persisted: boolean;
+}
+
+export interface UpdateSettingRequest {
+    key: string;
+    value: any;
+}

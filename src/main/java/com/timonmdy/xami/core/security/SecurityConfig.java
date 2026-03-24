@@ -9,7 +9,6 @@ import com.timonmdy.xami.service.auth.AuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -56,7 +55,7 @@ public class SecurityConfig {
      * @throws Exception in case of configuration errors
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(@NonNull HttpSecurity http, AuthHeaderService authHeaderService) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthHeaderService authHeaderService) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
@@ -82,8 +81,7 @@ public class SecurityConfig {
      */
     @Bean
     public AuthenticationManager authenticationManager() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(authService);
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(authService);
         provider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(provider);
     }

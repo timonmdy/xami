@@ -1,4 +1,4 @@
-import { ChangeRoleRequest, User, UserNotification, UserRole } from "../types/User.types";
+import { ChangeRoleRequest, UpdateSettingRequest, User, UserNotification, UserRole, UserSetting } from "../types/User.types";
 import { FetchWrapper } from "../core/FetchWrapper";
 
 export const getAllUsers = async (): Promise<User[]> => FetchWrapper.get<User[]>("/api/users/info/getUsers");
@@ -20,3 +20,11 @@ export const markUserNotificationAsSeen = async (id: number): Promise<void> => F
 export const markAllUserNotificationsAsSeen = async (): Promise<void> => FetchWrapper.post<void>("/api/users/notifications/seen", {});
 export const deleteUserNotification = async (id: number): Promise<void> => FetchWrapper.delete<void>(`/api/users/notifications/${id}`);
 export const deleteAllUserNotifications = async (): Promise<void> => FetchWrapper.delete<void>("/api/users/notifications");
+
+////////////////
+/// SETTINGS ///
+////////////////
+export const getSetting = async (key: string): Promise<UserSetting> => FetchWrapper.get<UserSetting>(`/api/users/settings/${key}`);
+export const updateSetting = async (request: UpdateSettingRequest): Promise<UserSetting> => FetchWrapper.put<UserSetting>(`/api/users/settings/${request.key}`, request);
+export const deleteUserSetting = async (key: string): Promise<void> => FetchWrapper.delete<void>(`/api/users/settings/${key}`);
+export const resetUserSettings = async (): Promise<void> => FetchWrapper.delete<void>(`/api/users/settings`);
